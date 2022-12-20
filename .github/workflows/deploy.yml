@@ -18,5 +18,5 @@ jobs:
         with:
           script_stop: true # Will stop build incase of any failures
           script: |
-            cd /home/odoo/odoo
+            cd /home/odoo/index-cargo-logistics
             sh scripts/update_server.sh

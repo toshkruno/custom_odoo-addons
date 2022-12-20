@@ -2,6 +2,7 @@ version: '2'
 services:
    db:
         image: postgres:15
+        container_name: index_db
         restart: always
         environment:
                 - POSTGRES_USER=odoo
@@ -15,7 +16,8 @@ services:
         networks:
                 - odoo
    odoo:        
-        image: odoo:15.0
+        image: tritel-index:15.0
+        container_name: index_odoo
         restart: always
         ports:
                 - 8015:8069
@@ -26,6 +28,7 @@ services:
                 - db
         volumes:
                 - ./config:/etc/odoo
+                - ./custom-addons:/mnt/extra-addons/custom-addons
                 - odoo-data:/var/lib/odoo
         networks:
                 - odoo
@@ -34,4 +37,5 @@ volumes:
         odoo-data:
         db-data:
 networks:
-        odoo:
+        tritel_index_odoo:
+        external: true
