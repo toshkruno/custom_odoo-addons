@@ -1,4 +1,4 @@
-FROM odoo-base:15.0
+FROM tritel-index-base:15.0
 USER odoo
 
 COPY requirements.txt mnt/extra-addons

@@ -14,7 +14,7 @@ services:
         volumes:
                 - db-data:/var/lib/postgresql/data/pgdata
         networks:
-                - odoo
+                - tritel_index_odoo
    odoo:        
         image: tritel-index:15.0
         container_name: index_odoo
@@ -31,11 +31,11 @@ services:
                 - ./custom-addons:/mnt/extra-addons/custom-addons
                 - odoo-data:/var/lib/odoo
         networks:
-                - odoo
+                - tritel_index_odoo
 
 volumes:
         odoo-data:
         db-data:
 networks:
         tritel_index_odoo:
-        external: true
+                external: true
