@@ -36,4 +36,4 @@ jobs:
       with:
         script_stop: true # Will stop build incase of any failures
         script: |
-          docker run --rm --net tritel_index_odoo --link index_db:db mwiti:15.0 odoo -d ${{ github.event.inputs.db }} -u ${{ github.event.inputs.name }} --no-http --stop
+          docker run --rm --net index-cargo-logistics_default --link index_db:db mwiti:15.0 odoo -d ${{ github.event.inputs.db }} -u ${{ github.event.inputs.name }} --no-http --stop
