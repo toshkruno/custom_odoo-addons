@@ -26,64 +26,57 @@ from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
 
+TRANSPORT_MODES = [('land', 'Land'), ('air', 'Air'), ('sea', 'Sea'), ('rail', 'Rail')]
+
+
 class FreightOrder(models.Model):
     _name = 'freight.order'
     _description = 'Freight Order'
 
     name = fields.Char('Name', default='New', readonly=True)
-    shipper_id = fields.Many2one('res.partner', 'Shipper', required=True,
-                                 help="Shipper's Details")
-    consignee_id = fields.Many2one('res.partner', 'Consignee',
-                                   help="Details of consignee")
+    shipper_id = fields.Many2one('res.partner', 'Partner', required=True, help="Customer's Details")
+    consignee_id = fields.Many2one('res.partner', 'Consignee', help="Details of consignee")
     type = fields.Selection([('import', 'Import'), ('export', 'Export')],
-                            'Import/Export', required=True,
-                            help="Type of freight operation")
-    transport_type = fields.Selection([('land', 'Land'), ('air', 'Air'),
-                                       ('water', 'Water')], "Transport",
-                                      help='Type of transportation',
-                                      required=True)
+                            'Import/Export', required=True, help="Type of freight operation")
+    transport_type = fields.Selection(TRANSPORT_MODES, "Transport", help='Type of transportation', required=True)
     land_type = fields.Selection([('ltl', 'LTL'), ('ftl', 'FTL')],
-                                 'Land Shipping',
-                                 help="Types of shipment movement involved in Land")
-    water_type = fields.Selection([('fcl', 'FCL'), ('lcl', 'LCL')],
-                                  'Water Shipping',
-                                  help="Types of shipment movement involved in Water")
-    order_date = fields.Date('Date', default=fields.Date.today(),
-                             help="Date of order")
+                                 'Land Shipping', help="Types of shipment movement involved in Land")
+    sea_type = fields.Selection([('fcl', 'FCL'), ('lcl', 'LCL')],
+                                'Sea Shipping', help="Types of shipment movement involved in Sea")
+    rail_type = fields.Selection(
+        [('dhr', 'Double-headed Rail'),
+         ('bhr', 'Bull-headed Rail'),
+         ('ffr', 'Flat-footed Rail')],
+        'Rail Shipping', help="Types of shipment movement involved in Rail")
+    order_date = fields.Date('Date', default=fields.Date.today(), help="Date of order")
     loading_port_id = fields.Many2one('freight.port', string="Loading Port",
-                                      required=True,
-                                      help="Loading port of the freight order")
-    discharging_port_id = fields.Many2one('freight.port',
-                                          string="Discharging Port",
-                                          required=True,
-                                          help="Discharging port of freight order")
+                                      required=True, help="Loading port of the freight order")
+    discharging_port_id = fields.Many2one('freight.port', string="Discharging Port",
+                                          required=True, help="Discharging port of freight order")
     state = fields.Selection([('draft', 'Draft'), ('submit', 'Submitted'),
                               ('confirm', 'Confirmed'),
                               ('invoice', 'Invoiced'), ('done', 'Done'),
                               ('cancel', 'Cancel')], default='draft')
     clearance = fields.Boolean("Clearance")
-    clearance_count = fields.Integer(compute='compute_count')
-    invoice_count = fields.Integer(compute='compute_count')
-    total_order_price = fields.Float('Total',
-                                     compute='_compute_total_order_price')
-    total_volume = fields.Float('Total Volume',
-                                compute='_compute_total_order_price')
-    total_weight = fields.Float('Total Weight',
-                                compute='_compute_total_order_price')
+    clearance_count = fields.Integer(compute='compute_moves_count')
+    invoice_count = fields.Integer(compute='compute_moves_count')
+    bills_count = fields.Integer(compute='compute_moves_count')
+    total_order_price = fields.Float('Total', compute='_compute_total_order_price')
+    total_volume = fields.Float('Total Volume', compute='_compute_total_order_price')
+    total_weight = fields.Float('Total Weight', compute='_compute_total_order_price')
     order_ids = fields.One2many('freight.order.line', 'order_id')
     route_ids = fields.One2many('freight.order.routes.line', 'route_id')
-    total_route_sale = fields.Float('Total Sale',
-                                    compute="_compute_total_route_cost")
+    total_route_sale = fields.Float('Total Sale', compute="_compute_total_route_cost")
     service_ids = fields.One2many('freight.order.service', 'line_id')
-    total_service_sale = fields.Float('Service Total Sale',
-                                      compute="_compute_total_service_cost")
-    agent_id = fields.Many2one('res.partner', 'Agent', required=True,
-                               help="Details of agent")
+    total_service_sale = fields.Float('Service Total Sale', compute="_compute_total_service_cost")
+    agent_id = fields.Many2one('res.partner', 'Agent', required=True, help="Details of agent")
+    company_id = fields.Many2one('res.company', string='Company', default=lambda s: s.env.company.id)
     expected_date = fields.Date('Expected Date')
     track_ids = fields.One2many('freight.track', 'track_id')
+    bill_landing = fields.Char(string='Bill of Landing')
+    custom_entry = fields.Char(string='Custom Entry')
 
-    @api.depends('order_ids.total_price', 'order_ids.volume',
-                 'order_ids.weight')
+    @api.depends('order_ids.total_price', 'order_ids.volume', 'order_ids.weight')
     def _compute_total_order_price(self):
         """Computing the price of the order"""
         for rec in self:
@@ -157,6 +150,34 @@ class FreightOrder(models.Model):
             }
         }
 
+    def create_service_bills(self):
+        partner_group = {}
+        for service in self.service_ids.filtered(
+                lambda s: s.partner_id.id != self.company_id.partner_id.
+                id and s.partner_id.id not in self.company_id.partner_id.child_ids.ids):
+            
+            value = (0, 0, {
+                'name': service.service_id.name,
+                'price_unit': service.sale,
+                'quantity': service.qty
+            })
+            if partner_group.get(service.partner_id.id):
+                partner_group[service.partner_id.id].append(value)
+            else:
+                partner_group[service.partner_id.id] = [value]
+
+        for group, group_values in partner_group.items():
+            invoice = {
+                'move_type': 'in_invoice',
+                'partner_id': group,
+                'invoice_user_id': self.env.user.id,
+                'invoice_origin': self.name,
+                'ref': self.name,
+                'company_id': self.company_id.id,
+                'invoice_line_ids': group_values,
+            }
+            self.env['account.move'].create(invoice)
+
     def create_invoice(self):
         """Create invoice"""
         lines = []
@@ -186,15 +207,17 @@ class FreightOrder(models.Model):
                 })
                 lines.append(value)
 
-        invoice_line = {
+        invoice = {
             'move_type': 'out_invoice',
             'partner_id': self.shipper_id.id,
             'invoice_user_id': self.env.user.id,
             'invoice_origin': self.name,
             'ref': self.name,
+            'bill_landing': self.bill_landing,
+            'custom_entry': self.custom_entry,
             'invoice_line_ids': lines,
         }
-        inv = self.env['account.move'].create(invoice_line)
+        inv = self.env['account.move'].create(invoice)
         result = {
             'name': 'action.name',
             'type': 'ir.actions.act_window',
@@ -214,19 +237,29 @@ class FreightOrder(models.Model):
             raise ValidationError("You can't cancel this order")
 
     def get_invoice(self):
-        """View the invoice"""
         self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
-            'name': 'Invoice',
+            'name': f'{self.name} Invoices',
             'view_mode': 'tree,form',
             'res_model': 'account.move',
-            'domain': [('ref', '=', self.name)],
+            'domain': [('ref', '=', self.name), ('move_type', 'in', ('out_invoice', 'out_refund'))],
+            'context': "{'create': False}"
+        }
+
+    def get_bills(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': f'{self.name} Bills',
+            'view_mode': 'tree,form',
+            'res_model': 'account.move',
+            'domain': [('ref', '=', self.name), ('move_type', 'in', ('in_invoice', 'in_refund'))],
             'context': "{'create': False}"
         }
 
     @api.depends('name')
-    def compute_count(self):
+    def compute_moves_count(self):
         """Compute custom clearance and account move's count"""
         for rec in self:
             if rec.env['custom.clearance'].search([('freight_id', '=', rec.id)]):
@@ -234,11 +267,12 @@ class FreightOrder(models.Model):
                     [('freight_id', '=', rec.id)])
             else:
                 rec.clearance_count = 0
-            if rec.env['account.move'].search([('ref', '=', rec.name)]):
-                rec.invoice_count = rec.env['account.move'].search_count(
-                    [('ref', '=', rec.name)])
-            else:
-                rec.invoice_count = 0
+
+            invoice_domain = [('ref', '=', rec.name), ('move_type', 'in', ('out_invoice', 'out_refund'))]
+            rec.invoice_count = self.env['account.move'].search_count(invoice_domain)
+
+            bills_domain = [('ref', '=', rec.name), ('move_type', 'in', ('in_invoice', 'in_refund'))]
+            rec.bills_count = self.env['account.move'].search_count(bills_domain)
 
     def action_submit(self):
         """Submitting order"""
@@ -328,6 +362,7 @@ class FreightOrder(models.Model):
 
             for line in rec.order_ids:
                 line.container_id.state = 'reserve'
+            rec.create_service_bills()
 
     def action_done(self):
         """Mark order as done"""
@@ -437,9 +472,7 @@ class FreightOrderRouteLine(models.Model):
     operation_id = fields.Many2one('freight.routes', required=True)
     source_loc = fields.Many2one('freight.port', 'Source Location')
     destination_loc = fields.Many2one('freight.port', 'Destination Location')
-    transport_type = fields.Selection([('land', 'Land'), ('air', 'Air'),
-                                       ('water', 'Water')], "Transport",
-                                      required=True)
+    transport_type = fields.Selection(TRANSPORT_MODES, "Transport", required=True)
     sale = fields.Float('Sale')
 
     @api.onchange('operation_id', 'transport_type')
@@ -451,8 +484,10 @@ class FreightOrderRouteLine(models.Model):
                     rec.sale = rec.operation_id.land_sale
                 elif rec.transport_type == 'air':
                     rec.sale = rec.operation_id.air_sale
-                elif rec.transport_type == 'water':
-                    rec.sale = rec.operation_id.water_sale
+                elif rec.transport_type == 'sea':
+                    rec.sale = rec.operation_id.sea_sale
+                elif rec.transport_type == 'rail':
+                    rec.sale = rec.operation_id.rail_sale
 
 
 class FreightOrderServiceLine(models.Model):
@@ -495,9 +530,7 @@ class Tracking(models.Model):
 
     source_loc = fields.Many2one('freight.port', 'Source Location')
     destination_loc = fields.Many2one('freight.port', 'Destination Location')
-    transport_type = fields.Selection([('land', 'Land'), ('air', 'Air'),
-                                       ('water', 'Water')], "Transport")
+    transport_type = fields.Selection(TRANSPORT_MODES, "Transport")
     track_id = fields.Many2one('freight.order')
     date = fields.Date('Date')
-    type = fields.Selection([('received', 'Received'),
-                             ('delivered', 'Delivered')], 'Received/Delivered')
+    type = fields.Selection([('received', 'Received'), ('delivered', 'Delivered')], 'Received/Delivered')

@@ -34,17 +34,22 @@
     'data': [
         'security/ir.model.access.csv',
         'data/freight_order_data.xml',
+
+        'wizard/custom_revision.xml',
+
+        'report/report_tracking.xml',
+        'report/report_order.xml',
+
         'views/freight_order.xml',
         'views/freight_port.xml',
         'views/freight_container.xml',
         'views/custom_clearance.xml',
         'views/order_track.xml',
-        'report/report_order.xml',
-        'report/report_tracking.xml',
-        'wizard/custom_revision.xml'
+        'views/others.xml',
+
     ],
     'installable': True,
-    'application': False,
+    'application': True,
     'auto_install': False,
     'license': 'AGPL-3',
 }

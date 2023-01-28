@@ -30,7 +30,8 @@
                                     <field name="active" widget="boolean_toggle"/>
                                     <field name="land" />
                                     <field name="air" />
-                                    <field name="water" />
+                                    <field name="sea" />
+                                    <field name="rail" />
                                 </group>
                             </group>
                         </sheet>
@@ -130,7 +131,8 @@
                                 <group>
                                     <field name="land_sale"/>
                                     <field name="air_sale"/>
-                                    <field name="water_sale"/>
+                                    <field name="sea_sale"/>
+                                    <field name="rail_sale"/>
                                 </group>
                             </group>
                         </sheet>

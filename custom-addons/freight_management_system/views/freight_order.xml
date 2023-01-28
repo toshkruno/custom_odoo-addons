@@ -14,40 +14,34 @@
         </record>
 
         <record id="freight_order_form_view" model="ir.ui.view">
-        <field name="name">Freight Order</field>
-        <field name="model">freight.order</field>
-        <field name="arch" type="xml">
+            <field name="name">Freight Order</field>
+            <field name="model">freight.order</field>
+            <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="create_custom_clearance" string="Custom Clearance" type="object" class="oe_highlight"
-                                data-hotkey="w" attrs="{'invisible': [('clearance', '=', True)]}"/>
-                        <button name="action_submit" string="Submit" type="object" class="oe_highlight"
-                                data-hotkey="w" states="draft"/>
-                        <button name="action_confirm" string="Confirm" type="object" class="oe_highlight"
-                                data-hotkey="w" states="submit"/>
-                        <button name="create_invoice" string="Invoice" type="object" class="oe_highlight" states="confirm"
-                                data-hotkey="w"/>
-                        <button name="track_order" string="Tracking" type="object" class="oe_highlight" states="confirm,invoice"
-                                data-hotkey="w"/>
-                        <button name="action_done" string="Done" type="object" class="oe_highlight" states="confirm,invoice"
-                                data-hotkey="w"/>
-                        <button name="action_cancel" string="Cancel" type="object" states="draft,submit,confirm,invoice"
-                                data-hotkey="w"/>
+                        <button name="create_custom_clearance" string="Custom Clearance" type="object" class="oe_highlight" data-hotkey="w" attrs="{'invisible': [('clearance', '=', True)]}"/>
+                        <button name="action_submit" string="Submit" type="object" class="oe_highlight" data-hotkey="w" states="draft"/>
+                        <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" data-hotkey="w" states="submit"/>
+                        <button name="create_invoice" string="Invoice" type="object" class="oe_highlight" states="confirm" data-hotkey="w"/>
+                        <button name="track_order" string="Tracking" type="object" class="oe_highlight" states="confirm,invoice" data-hotkey="w"/>
+                        <button name="action_done" string="Done" type="object" class="oe_highlight" states="confirm,invoice" data-hotkey="w"/>
+                        <button name="action_cancel" string="Cancel" type="object" states="draft,submit,confirm,invoice" data-hotkey="w"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,submit,confirm" readonly="1"/>
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <button class="oe_stat_button" type="object" name="get_custom_clearance"
-                                icon="fa-id-card-o">
+                            <button class="oe_stat_button" type="object" name="get_invoice" icon="fa-pencil-square-o">
+                                <field string="Invoice" name="invoice_count" widget="statinfo"/>
+                            </button>
+                            <button class="oe_stat_button" type="object" name="get_custom_clearance" icon="fa-id-card-o">
                                 <field string="Clearance" name="clearance_count" widget="statinfo"/>
                             </button>
-                            <button class="oe_stat_button" type="object" name="get_invoice"
-                                icon="fa-pencil-square-o">
-                                <field string="Invoice" name="invoice_count" widget="statinfo"/>
+                            <button class="oe_stat_button" type="object" name="get_bills" icon="fa-pencil-square-o">
+                                <field string="Bills" name="bills_count" widget="statinfo"/>
                             </button>
                         </div>
                         <div class="oe_title">
-                            <h1 class="mt0" >
+                            <h1 class="mt0">
                                 <field name="name"/>
                             </h1>
                         </div>
@@ -62,7 +56,8 @@
                                 <field name="type"/>
                                 <field name="transport_type"/>
                                 <field name="land_type" attrs="{'invisible': [('transport_type', '!=', 'land')]}"/>
-                                <field name="water_type" attrs="{'invisible': [('transport_type', '!=', 'water')]}"/>
+                                <field name="sea_type" attrs="{'invisible': [('transport_type', '!=', 'sea')]}"/>
+                                <field name="rail_type" attrs="{'invisible': [('transport_type', '!=', 'rail')]}"/>
                             </group>
                         </group>
                         <group>
@@ -76,9 +71,12 @@
                         <group>
                             <group>
                                 <field name="agent_id"/>
+                                <field name="bill_landing" />
                             </group>
                             <group>
                                 <field name="expected_date"/>
+                                <field name="custom_entry" />
+                                <field name="company_id" />
                             </group>
                         </group>
                         <notebook>
@@ -158,8 +156,8 @@
                         </notebook>
                     </sheet>
                 </form>
-        </field>
-    </record>
+            </field>
+        </record>
 
         <record id="action_freight_order" model="ir.actions.act_window">
             <field name="name">Freight Order</field>
@@ -167,9 +165,9 @@
             <field name="res_model">freight.order</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
-              <p class="o_view_nocontent_smiling_face">
+                <p class="o_view_nocontent_smiling_face">
                 Define a new freight order
-              </p>
+                </p>
             </field>
 
         </record>

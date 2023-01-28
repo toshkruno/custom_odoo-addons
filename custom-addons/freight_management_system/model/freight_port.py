@@ -29,13 +29,13 @@ class FreightPort(models.Model):
 
     name = fields.Char('Name')
     code = fields.Char('Code')
-    state_id = fields.Many2one('res.country.state',
-                               domain="[('country_id', '=', country_id)]")
+    state_id = fields.Many2one('res.country.state', domain="[('country_id', '=', country_id)]")
     country_id = fields.Many2one('res.country', required=True)
     active = fields.Boolean('Active', default=True)
     land = fields.Boolean('Land')
     air = fields.Boolean('Air')
-    water = fields.Boolean('Water')
+    sea = fields.Boolean('Sea')
+    rail = fields.Boolean('Rail')
 
 
 class FreightPricing(models.Model):
@@ -53,4 +53,5 @@ class FreightRoutes(models.Model):
     active = fields.Boolean('Active', default=True)
     land_sale = fields.Float('Sale Price for Land', required=True)
     air_sale = fields.Float('Sale Price for Air', required=True)
-    water_sale = fields.Float('Sale Price for Water', required=True)
+    sea_sale = fields.Float('Sale Price for Sea', required=True)
+    rail_sale = fields.Float('Sale Price for Rail', required=True)

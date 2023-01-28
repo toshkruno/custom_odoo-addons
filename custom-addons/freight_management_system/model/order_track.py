@@ -24,6 +24,7 @@
 from werkzeug import urls
 from odoo import fields, models, _
 
+TRANSPORT_MODES = [('land', 'Land'), ('air', 'Air'), ('sea', 'Sea'),('rail', 'Rail')]
 
 class FreightTracking(models.Model):
     _name = 'freight.order.track'
@@ -32,10 +33,8 @@ class FreightTracking(models.Model):
     freight_id = fields.Many2one('freight.order')
     source_loc = fields.Many2one('freight.port', 'Source Location')
     destination_loc = fields.Many2one('freight.port', 'Destination Location')
-    transport_type = fields.Selection([('land', 'Land'), ('air', 'Air'),
-                                       ('water', 'Water')], "Transport")
-    type = fields.Selection([('received', 'Received'),
-                             ('delivered', 'Delivered')], 'Received/Delivered')
+    transport_type = fields.Selection(TRANSPORT_MODES, "Transport")
+    type = fields.Selection([('received', 'Received'), ('delivered', 'Delivered')], 'Received/Delivered')
 
     def order_submit(self):
         """Create tracking details of order"""
@@ -91,8 +90,6 @@ class FreightTrackingLine(models.Model):
     track_line_id = fields.Many2one('freight.order.track')
     source_loc = fields.Many2one('freight.port', 'Source Location')
     destination_loc = fields.Many2one('freight.port', 'Destination Location')
-    transport_type = fields.Selection([('land', 'Land'), ('air', 'Air'),
-                                       ('water', 'Water')], "Transport")
+    transport_type = fields.Selection(TRANSPORT_MODES, "Transport")
     date = fields.Date('Date')
-    type = fields.Selection([('receive', 'Received'), ('deliver', 'Delivered')],
-                            'Received/Delivered')
+    type = fields.Selection([('receive', 'Received'), ('deliver', 'Delivered')], 'Received/Delivered')
