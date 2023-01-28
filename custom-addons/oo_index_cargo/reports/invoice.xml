@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <template id="oo_index_report_invoice_document" inherit_id="account.report_invoice_document">
+        <xpath expr="//div[@id='qrcode']" position="after">
+            <div id="indexqr">
+                <p>
+                    <t t-set="base_url" t-value="request.env['ir.config_parameter'].get_param('web.base.url')"/>
+                    <t t-set="portal_url" t-value="o.get_portal_url(report_type='html')"/>
+                    <t t-set="url" t-value="'{}{}'.format(base_url,portal_url)"/>
+                    <strong class="text-center">Valid Index Cargo Invoice. Scan Me!</strong>
+                    <br/>
+                    <br/>
+                    <img class="border border-dark rounded" t-att-src="'/report/barcode/?type=QR&amp;value={}&amp;width=110&amp;height=110'.format(url)"/>
+                </p>
+            </div>
+        </xpath>
+    </template>
+</odoo>
