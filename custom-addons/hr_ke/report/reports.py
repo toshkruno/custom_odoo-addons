@@ -341,7 +341,7 @@ class PayrollReports(models.Model):
                 # Employer NSSF Number in the HR/Payroll Settings
                 ws['B3'] = rec.journal_id.company_id.employer_nssf or None
                 ws['A4'] = 'EMPLOYER NAME'
-                ws['B4'] = rec.company_id.nssf_name or None
+                ws['B4'] = rec.journal_id.company_id.name or None
                 ws['A5'] = 'CONTRIBUTIONS PERIOD'
                 ws['B5'] = fields.Date.from_string(
                     rec.date_end).strftime('%m%Y')
