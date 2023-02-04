@@ -28,7 +28,7 @@ services:
                 - db
         volumes:
                 - ./config:/etc/odoo
-                - ~/backups:/mnt/backups
+                - /home/odoo/backups:/mnt/backups
                 - ./custom-addons:/mnt/extra-addons/custom-addons
                 - odoo-data:/var/lib/odoo
         networks:
