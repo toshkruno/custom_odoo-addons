@@ -194,7 +194,6 @@
                 <p t-if="o.net_wage &lt; 0">The net amount will be recovered from the first positive
                     remuneration established after this.</p>
 
-                <p class="text-center">Made by Odoo with ❤️</p>
             </div>
         </xpath>
     </template>
