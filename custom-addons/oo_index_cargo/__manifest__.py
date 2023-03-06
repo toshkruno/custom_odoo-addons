@@ -21,6 +21,8 @@
     # always loaded
     'data': [
         'reports/invoice.xml',
+        'reports/payslip.xml',
+        'views/invoice.xml',
     ],
 
 }
