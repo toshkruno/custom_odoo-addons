@@ -1,30 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <record id="report_freight" model="ir.actions.report">
-            <field name="name">
-                Freight Order
-            </field>
-            <field name="model">
-                freight.order
-            </field>
-            <field name="report_type">
-                qweb-pdf
-            </field>
-            <field name="report_name">
-                freight_management_system.report_freight_order
-            </field>
-            <field name="report_file">
-                freight_management_system.report_freight_order
-            </field>
-            <field name="print_report_name">
-                'Freight Order - %s' % object.name
-            </field>
-            <field name="binding_model_id" ref="model_freight_order" />
-            <field name="binding_type">
-                report
-            </field>
-        </record>
+
         <template id="report_freight_order">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="doc">
@@ -304,5 +281,16 @@
                 </t>
             </t>
         </template>
+
+        <record id="report_freight" model="ir.actions.report">
+            <field name="name">Freight Order</field>
+            <field name="model">freight.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">freight_management_system.report_freight_order</field>
+            <field name="report_file">freight_management_system.report_freight_order</field>
+            <field name="print_report_name">'Freight Order - %s' % object.name</field>
+            <field name="binding_model_id" ref="model_freight_order" />
+            <field name="binding_type">report</field>
+        </record>
     </data>
 </odoo>
