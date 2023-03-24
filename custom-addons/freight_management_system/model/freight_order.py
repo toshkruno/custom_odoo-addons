@@ -214,7 +214,7 @@ class FreightOrder(models.Model):
             'invoice_user_id': self.env.user.id,
             'invoice_origin': self.name,
             'ref': self.name,
-            'transport': self.transport,
+            'transport_type': self.transport_type,
             'awb_number': self.awb_number,
             'consignee_id': self.consignee_id.id,
             'ship_date': self.order_date,

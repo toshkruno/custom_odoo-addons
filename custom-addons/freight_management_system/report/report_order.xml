@@ -55,12 +55,12 @@
                                 </div>
                             </div>
 
-                            <div class="col-auto col-3" t-if="doc.transport">
+                            <div class="col-auto col-3" t-if="doc.transport_type">
                                 <div name="cargo">
                                     <strong>Cargo:</strong>
                                 </div>
                                 <div>
-                                    <p t-field="doc.transport" />
+                                    <p t-field="doc.transport_type" />
                                 </div>
                             </div>
                             
