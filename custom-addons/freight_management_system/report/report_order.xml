@@ -16,8 +16,8 @@
                                     <div t-field="doc.shipper_id.name" />
                                     <div t-field="doc.shipper_id.street" />
                                     <div t-field="doc.shipper_id.city" />
-                                    <t t-field="doc.shipper_id.state_id.name" />
-                                    <t t-field="doc.shipper_id.zip" />
+                                    <span t-field="doc.shipper_id.state_id.name" /> &amp;nbsp;
+                                    <span t-field="doc.shipper_id.zip" />
                                     <div t-field="doc.shipper_id.country_id.name" />
                                 </div>
                             </div>
