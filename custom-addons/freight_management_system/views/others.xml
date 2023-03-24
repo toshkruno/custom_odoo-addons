@@ -8,8 +8,14 @@
         <field name="arch" type="xml">
           
             <xpath expr="//field[@name='payment_reference']" position="after">
-                <field name="bill_landing" attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund'))]}"/>
+                <field name="ship_to_id" attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund'))]}"/>
+                <field name="consignee_id" attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund'))]}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='currency_id']" position="after">
+                <field name="awb_number" attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund'))]}"/>
                 <field name="custom_entry" attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund'))]}"/>
+                <field name="transport" attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund'))]}"/>
             </xpath>
 
         </field>

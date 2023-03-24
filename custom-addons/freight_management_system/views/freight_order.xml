@@ -48,6 +48,7 @@
                         <group>
                             <group>
                                 <field name="shipper_id"/>
+                                <field name="ship_to_id"/>
                                 <field name="consignee_id"/>
                                 <field name="order_date"/>
                             </group>
@@ -71,7 +72,7 @@
                         <group>
                             <group>
                                 <field name="agent_id"/>
-                                <field name="bill_landing" />
+                                <field name="awb_number" />
                             </group>
                             <group>
                                 <field name="expected_date"/>

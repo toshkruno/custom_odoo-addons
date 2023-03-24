@@ -39,6 +39,7 @@
 
         'report/report_tracking.xml',
         'report/report_order.xml',
+        'report/invoice.xml',
 
         'views/freight_order.xml',
         'views/freight_port.xml',

@@ -35,10 +35,11 @@ class FreightOrder(models.Model):
 
     name = fields.Char('Name', default='New', readonly=True)
     shipper_id = fields.Many2one('res.partner', 'Partner', required=True, help="Customer's Details")
-    consignee_id = fields.Many2one('res.partner', 'Consignee', help="Details of consignee")
+    consignee_id = fields.Many2one('res.partner', 'Shipper Name', help="Details of consignee")
+    ship_to_id = fields.Many2one('res.partner', string='Ship To', domain=[('type', '=', 'delivery')])
     type = fields.Selection([('import', 'Import'), ('export', 'Export')],
                             'Import/Export', required=True, help="Type of freight operation")
-    transport_type = fields.Selection(TRANSPORT_MODES, "Transport", help='Type of transportation', required=True)
+    transport_type = fields.Selection(TRANSPORT_MODES, "Cargo", help='Type of transportation', required=True)
     land_type = fields.Selection([('ltl', 'LTL'), ('ftl', 'FTL')],
                                  'Land Shipping', help="Types of shipment movement involved in Land")
     sea_type = fields.Selection([('fcl', 'FCL'), ('lcl', 'LCL')],
@@ -48,7 +49,7 @@ class FreightOrder(models.Model):
          ('bhr', 'Bull-headed Rail'),
          ('ffr', 'Flat-footed Rail')],
         'Rail Shipping', help="Types of shipment movement involved in Rail")
-    order_date = fields.Date('Date', default=fields.Date.today(), help="Date of order")
+    order_date = fields.Date('Shipping Date', default=fields.Date.today(), help="Date of order")
     loading_port_id = fields.Many2one('freight.port', string="Loading Port",
                                       required=True, help="Loading port of the freight order")
     discharging_port_id = fields.Many2one('freight.port', string="Discharging Port",
@@ -73,7 +74,7 @@ class FreightOrder(models.Model):
     company_id = fields.Many2one('res.company', string='Company', default=lambda s: s.env.company.id)
     expected_date = fields.Date('Expected Date')
     track_ids = fields.One2many('freight.track', 'track_id')
-    bill_landing = fields.Char(string='Bill of Landing')
+    awb_number = fields.Char(string='AWB Number')
     custom_entry = fields.Char(string='Custom Entry')
 
     @api.depends('order_ids.total_price', 'order_ids.volume', 'order_ids.weight')
@@ -213,7 +214,11 @@ class FreightOrder(models.Model):
             'invoice_user_id': self.env.user.id,
             'invoice_origin': self.name,
             'ref': self.name,
-            'bill_landing': self.bill_landing,
+            'transport': self.transport,
+            'awb_number': self.awb_number,
+            'consignee_id': self.consignee_id.id,
+            'ship_date': self.order_date,
+            'ship_to_id': self.ship_to_id.id,
             'custom_entry': self.custom_entry,
             'invoice_line_ids': lines,
         }
