@@ -14,9 +14,9 @@
                 <p class="m-0" t-field="o.consignee_id"/>
             </div>
 
-            <div class="col-auto col-3 mw-100 mb-2" t-if="o.transport" name="transport">
+            <div class="col-auto col-3 mw-100 mb-2" t-if="o.transport_type" name="transport_type">
                 <strong>Transport:</strong>
-                <p class="m-0" t-field="o.transport"/>
+                <p class="m-0" t-field="o.transport_type"/>
             </div>
 
             <div class="col-auto col-3 mw-100 mb-2" t-if="o.awb_number" name="awb_number">
