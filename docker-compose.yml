@@ -29,6 +29,7 @@ services:
         volumes:
                 - ./config:/etc/odoo
                 - ./custom-addons:/mnt/extra-addons/custom-addons
+                - /home/backups:/mnt/backups
                 - odoo-data:/var/lib/odoo
         networks:
                 - tritel_index
