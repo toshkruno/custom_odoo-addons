@@ -10,7 +10,6 @@ class AccountMove(models.Model):
 
     po_number = fields.Char(string='PO Number')
     reference_number = fields.Char(string='Reference Number')
-    bn_number = fields.Char(string='BN Number')
 
     @api.model
     def create(self, vals):
@@ -27,6 +26,5 @@ class AccountMoveReversal(models.TransientModel):
         res.update({
             'po_number': move.po_number,
             'reference_number': move.reference_number,
-            'bn_number': move.bn_number,
         })
         return res

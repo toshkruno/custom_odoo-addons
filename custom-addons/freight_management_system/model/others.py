@@ -12,3 +12,19 @@ class AccountMove(models.Model):
     ship_to_id = fields.Many2one(comodel_name='res.partner', string='Ship To', domain=[('type', '=', 'delivery')])
     transport = fields.Selection(string='Cargo', selection=TRANSPORT_MODES)
     ship_date = fields.Date(string='Shipping Date')
+
+
+class AccountMoveReversal(models.TransientModel):
+    _inherit = 'account.move.reversal'
+
+    def _prepare_default_reversal(self, move):
+        res = super()._prepare_default_reversal(move)
+        res.update({
+            'custom_entry': move.custom_entry,
+            'awb_number': move.awb_number,
+            'ship_date': move.ship_date,
+            'transport': move.transport,
+            'consignee_id': move.consignee_id.id,
+            'ship_to_id': move.ship_to_id.id,
+        })
+        return res

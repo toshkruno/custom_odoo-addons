@@ -10,7 +10,6 @@
             <xpath expr="//field[@name='payment_reference']" position="after">
                 <field name="po_number" attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund'))]}"/>
                 <field name="reference_number" attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund'))]}"/>
-                <field name="bn_number" attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund'))]}"/>
             </xpath>
         </field>
     </record>
