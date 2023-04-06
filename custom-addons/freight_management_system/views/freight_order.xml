@@ -173,7 +173,7 @@
 
         </record>
 
-        <menuitem id="menu_freight_root" name="Freight Management" sequence="4" />
+        <menuitem id="menu_freight_root" name="Freight Management" sequence="4" web_icon="freight_management_system,static/description/icon.png" />
         <menuitem id="menu_freight_order" name="Shipping" parent="menu_freight_root" sequence="2" action="action_freight_order"/>
 
     </data>
