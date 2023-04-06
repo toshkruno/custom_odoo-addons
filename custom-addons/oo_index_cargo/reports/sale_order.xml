@@ -6,7 +6,7 @@
             <xpath expr="//th[@name='th_priceunit']" position="move"/>                
         </xpath>
 
-        <xpath expr="//th[@name='th_taxes]" position="replace">
+        <xpath expr="//th[@name='th_taxes']" position="replace">
             <th name="th_taxes" class="text-right">VAT</th>
         </xpath>
 
