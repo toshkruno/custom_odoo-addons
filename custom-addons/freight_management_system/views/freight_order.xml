@@ -78,6 +78,7 @@
                                 <field name="expected_date"/>
                                 <field name="custom_entry" />
                                 <field name="company_id" />
+                                <field name="company_currency_id" invisible="1" />
                             </group>
                         </group>
                         <notebook>
@@ -127,7 +128,7 @@
                                 </group>
                             </page>
                             <page string="Services">
-                                <field name="service_ids">
+                                <field name="service_ids" context="{'default_currency_id': company_currency_id}">
                                     <tree string="Services" editable="bottom">
                                         <field name="partner_id"/>
                                         <field name="service_id"/>

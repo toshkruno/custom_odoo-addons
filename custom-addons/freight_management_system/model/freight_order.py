@@ -72,6 +72,7 @@ class FreightOrder(models.Model):
     total_service_sale = fields.Float('Service Total Sale', compute="_compute_total_service_cost")
     agent_id = fields.Many2one('res.partner', 'Agent', required=True, help="Details of agent")
     company_id = fields.Many2one('res.company', string='Company', default=lambda s: s.env.company.id)
+    company_currency_id = fields.Many2one(related='company_id.currency_id')
     expected_date = fields.Date('Expected Date')
     track_ids = fields.One2many('freight.track', 'track_id')
     awb_number = fields.Char(string='AWB / BL Number')
@@ -505,18 +506,15 @@ class FreightOrderRouteLine(models.Model):
 
 class FreightOrderServiceLine(models.Model):
     _name = 'freight.order.service'
+    _description = 'Manage fleet services'
 
-    @api.model
-    def _get_default_currency(self):
-        for rec in self:
-            rec.currency_id = rec.line_id.company_id.currency_id.id
             
     line_id = fields.Many2one('freight.order')
     service_id = fields.Many2one('freight.service', required=True)
     partner_id = fields.Many2one('res.partner', string="Vendor")
     qty = fields.Float('Quantity', default=1.0)
     cost = fields.Float('Cost')
-    currency_id = fields.Many2one('res.currency', string='Currency', required=True, default=_get_default_currency)
+    currency_id = fields.Many2one('res.currency', string='Currency', required=True)
     currency_rate = fields.Float(string='Currency Rate', default=1.0)
     sale = fields.Float('Sale')
     total_sale = fields.Float('Total Sale (Ksh)', compute='_compute_total_sale')
