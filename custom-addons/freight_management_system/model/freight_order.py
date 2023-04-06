@@ -156,8 +156,12 @@ class FreightOrder(models.Model):
         for service in self.service_ids.filtered(
                 lambda s: s.partner_id.id != self.company_id.partner_id.
                 id and s.partner_id.id not in self.company_id.partner_id.child_ids.ids):
+            product_id =service.service_id.product_id
+            account_id = product_id.property_account_expense_id or product_id.categ_id.property_account_expense_categ_id
             
             value = (0, 0, {
+                'product_id': product_id.id,
+                'account_id': account_id.id,
                 'name': service.service_id.name,
                 'price_unit': service.sale,
                 'quantity': service.qty
@@ -201,7 +205,11 @@ class FreightOrder(models.Model):
 
         if self.service_ids:
             for service in self.service_ids:
+                product_id =service.service_id.product_id
+                account_id = product_id.property_account_income_id or product_id.categ_id.property_account_income_categ_id
                 value = (0, 0, {
+                    'product_id': product_id.id,
+                    'account_id': account_id.id,
                     'name': service.service_id.name,
                     'price_unit': service.sale,
                     'quantity': service.qty
@@ -501,7 +509,7 @@ class FreightOrderServiceLine(models.Model):
     line_id = fields.Many2one('freight.order')
     service_id = fields.Many2one('freight.service', required=True)
     partner_id = fields.Many2one('res.partner', string="Vendor")
-    qty = fields.Float('Quantity')
+    qty = fields.Float('Quantity', default=1.0)
     cost = fields.Float('Cost')
     sale = fields.Float('Sale')
     total_sale = fields.Float('Total Sale')

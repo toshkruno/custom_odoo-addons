@@ -44,6 +44,7 @@ class FreightService(models.Model):
     _name = 'freight.service'
 
     name = fields.Char('Name', required=True)
+    product_id = fields.Many2one('product.product', string='Service Product', domain=[('detailed_type', '=', 'service')])
     sale_price = fields.Float('Sale Price', required=True)
     line_ids = fields.One2many('freight.service.line', 'line_id')
 
