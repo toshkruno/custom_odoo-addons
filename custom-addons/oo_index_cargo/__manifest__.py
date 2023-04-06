@@ -16,12 +16,13 @@
     'version': '15.0.0.0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['account', 'hr_payroll'],
+    'depends': ['account', 'hr_payroll', 'sale'],
 
     # always loaded
     'data': [
         'reports/invoice.xml',
         'reports/payslip.xml',
+        'reports/sale_order.xml',
         'views/invoice.xml',
     ],
 
