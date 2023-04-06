@@ -132,6 +132,10 @@
                                         <field name="partner_id"/>
                                         <field name="service_id"/>
                                         <field name="qty"/>
+                                        <field name="cost"/>
+                                        <field name="amount"/>
+                                        <field name="currency_id"/>
+                                        <field name="currency_rate"/>
                                         <field name="sale"/>
                                         <field name="total_sale"/>
                                     </tree>

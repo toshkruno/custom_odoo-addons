@@ -74,7 +74,7 @@ class FreightOrder(models.Model):
     company_id = fields.Many2one('res.company', string='Company', default=lambda s: s.env.company.id)
     expected_date = fields.Date('Expected Date')
     track_ids = fields.One2many('freight.track', 'track_id')
-    awb_number = fields.Char(string='AWB Number')
+    awb_number = fields.Char(string='AWB /BL Number')
     custom_entry = fields.Char(string='Custom Entry')
 
     @api.depends('order_ids.total_price', 'order_ids.volume', 'order_ids.weight')
@@ -163,7 +163,7 @@ class FreightOrder(models.Model):
                 'product_id': product_id.id,
                 'account_id': account_id.id,
                 'name': service.service_id.name,
-                'price_unit': service.sale,
+                'price_unit': service.cost,
                 'quantity': service.qty
             })
             if partner_group.get(service.partner_id.id):
@@ -511,9 +511,22 @@ class FreightOrderServiceLine(models.Model):
     partner_id = fields.Many2one('res.partner', string="Vendor")
     qty = fields.Float('Quantity', default=1.0)
     cost = fields.Float('Cost')
-    sale = fields.Float('Sale')
+    currency_id = fields.Many2one('res.currency', string='Current')
+    currency_rate = fields.Float(string='Currency Rate')
+    amount = fields.Float(string='Amount')
+    sale = fields.Float('Sale In Ksh', compute='_compute_sale')
     total_sale = fields.Float('Total Sale')
 
+    @api.depends('currency_rate', 'amount')
+    def _compute_sale(self):
+        for rec in self:
+            rec.sale = rec.amount * rec.currency_rate
+    
+    @api.onchange('service_id')
+    def _onchange_service_id(self):
+        for rec in self:
+            rec.cost = rec.service_id.product_id.standard_price
+            
     @api.onchange('service_id', 'partner_id')
     def _onchange_partner_id(self):
         """Calculate the price of services"""
