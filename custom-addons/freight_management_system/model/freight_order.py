@@ -512,7 +512,7 @@ class FreightOrderServiceLine(models.Model):
     qty = fields.Float('Quantity', default=1.0)
     cost = fields.Float('Cost')
     currency_id = fields.Many2one('res.currency', string='Current')
-    currency_rate = fields.Float(string='Currency Rate')
+    currency_rate = fields.Float(string='Currency Rate', default=1.0)
     amount = fields.Float(string='Amount')
     sale = fields.Float('Sale In Ksh', compute='_compute_sale')
     total_sale = fields.Float('Total Sale')
