@@ -35,8 +35,8 @@ class employee_loan_type(models.Model):
     loan_term = fields.Integer('Loan Term', default=12, required="1")
     is_apply_interest = fields.Boolean('Apply Interest')
     interest_rate = fields.Float('Interest Rate', default=10)
-    interest_type = fields.Selection([('liner', 'Liner'), ('reduce', 'Reduce')], string='Interest Type',
-                                     default='liner')
+    interest_type = fields.Selection([('linear', 'Linear'), ('reduce', 'Reduce')], string='Interest Type',
+                                     default='linear')
 
     loan_account = fields.Many2one('account.account', string='Loan Account', required="1")
     interest_account = fields.Many2one('account.account', string='Interest Account', required="1")

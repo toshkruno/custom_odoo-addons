@@ -12,6 +12,7 @@ from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import math
 
 
 class employee_loan(models.Model):
@@ -56,17 +57,23 @@ class employee_loan(models.Model):
     date = fields.Date('Date', default=fields.Date.today())
     start_date = fields.Date('Start Date', default=fields.Date.today(), required=True)
     end_date = fields.Date('End Date', compute='_get_end_date')
-    term = fields.Integer('Term', default=0, required=True)
+    
+    # term = fields.Integer('Term', default=0, required=True)
+    term = fields.Integer('Term', default=0, compute='_compute_loan_term')
+    
     loan_type_id = fields.Many2one('employee.loan.type', string='Type', required=True)
     payment_method = fields.Selection([('by_payslip', 'By Payslip')], string='Payment Method', default='by_payslip',
                                       required=True)
     loan_amount = fields.Float('Loan Amount', required=True)
     paid_amount = fields.Float('Paid Amount', compute='get_paid_amount')
     remaing_amount = fields.Float('Remaing Amount', compute='get_remaing_amount')
-    installment_amount = fields.Float('Installment Amount', required=True, compute='get_installment_amount')
+    # installment_amount = fields.Float('Installment Amount', required=True, compute='get_installment_amount')    
+    installment_amount = fields.Float(string='', required=True)
+    
+    
     loan_url = fields.Char('URL', compute='get_loan_url')
     is_apply_interest = fields.Boolean('Apply Interest')
-    interest_type = fields.Selection([('liner', 'Liner'), ('reduce', 'Reduce')], string='Interest Type')
+    interest_type = fields.Selection([('linear', 'Linear'), ('reduce', 'Reduce')], string='Interest Type')
     interest_rate = fields.Float(string='Interest Rate')
     interest_amount = fields.Float('Interest Amount', compute='get_interest_amount')
     extra_in_amount = fields.Float('Extra Int. Amount', compute='get_extra_interest')
@@ -148,33 +155,44 @@ class employee_loan(models.Model):
             loan.paid_amount = amt
 
     def compute_installment(self):
-        vals = []
-        for i in range(0, self.term):
-            date = self.start_date + relativedelta(months=i)
-            amount = self.loan_amount
-            interest_amount = 0.0
-            ins_interest_amount = 0.0
-            if self.is_apply_interest:
-                amount = self.loan_amount
-                interest_amount = (amount * self.term / 12 * self.interest_rate) / 100
-
-                if self.interest_rate and self.loan_amount and self.interest_type == 'reduce':
-                    amount = self.loan_amount - self.installment_amount * i
+        lines = []
+        for rec in self:
+            total_calculated = 0
+            rec.installment_lines = [(5,0,0)]
+            
+            for term in range(1, rec.term+1):
+                installment_date = self.start_date + relativedelta(months=term)
+                installment_amount = self.installment_amount
+                amount = rec.loan_amount
+                
+                if (total_calculated + installment_amount) > rec.loan_amount:
+                    installment_amount = rec.loan_amount - total_calculated
+                
+                interest_amount = 0.0
+                ins_interest_amount = 0.0
+                
+                if self.is_apply_interest:
                     interest_amount = (amount * self.term / 12 * self.interest_rate) / 100
-                ins_interest_amount = interest_amount / self.term
-            vals.append((0, 0, {
-                'name': 'INS - ' + self.name + ' - ' + str(i + 1),
-                'employee_id': self.employee_id and self.employee_id.id or False,
-                'date': date,
-                'amount': amount,
-                'interest': interest_amount,
-                'installment_amt': self.installment_amount,
-                'ins_interest': ins_interest_amount,
-            }))
-        if self.installment_lines:
-            for l in self.installment_lines:
-                l.unlink()
-        self.installment_lines = vals
+
+                    if self.interest_rate and self.loan_amount and self.interest_type == 'reduce':
+                        amount = amount - total_calculated
+                        interest_amount = (amount * self.term / 12 * self.interest_rate) / 100
+                    ins_interest_amount = interest_amount / self.term
+                
+                
+                lines.append((0, 0, {
+                    'name': f'INS - {rec.name} - {term}',
+                    'employee_id': rec.employee_id and rec.employee_id.id or False,
+                    'date': installment_date,
+                    'amount': amount,
+                    'interest': interest_amount,
+                    'installment_amt': installment_amount,
+                    'ins_interest': ins_interest_amount,
+                }))
+                total_calculated += installment_amount
+                
+            rec.installment_lines = lines
+                
 
     @api.depends('paid_amount', 'loan_amount', 'interest_amount', 'extra_in_amount')
     def get_remaing_amount(self):
@@ -202,7 +220,7 @@ class employee_loan(models.Model):
     def get_interest_amount(self):
         for loan in self:
             if loan.is_apply_interest:
-                if loan.interest_rate and loan.loan_amount and loan.interest_type == 'liner':
+                if loan.interest_rate and loan.loan_amount and loan.interest_type == 'linear':
                     loan.interest_amount = (loan.loan_amount * loan.term / 12 * loan.interest_rate) / 100
                 elif loan.interest_rate and loan.loan_amount and loan.interest_type == 'reduce':
                     loan.interest_amount = (loan.remaing_amount * loan.term / 12 * loan.interest_rate) / 100
@@ -230,6 +248,7 @@ class employee_loan(models.Model):
         if self.interest_type and self.is_apply_interest:
             if self.interest_rate != self.loan_type_id.interest_rate:
                 self.interest_rate = self.loan_type_id.interest_rate
+                
             if self.interest_type != self.loan_type_id.interest_type:
                 self.interest_type = self.loan_type_id.interest_type
 
@@ -246,6 +265,14 @@ class employee_loan(models.Model):
                     loan.loan_url = False
             else:
                 loan.loan_url = False
+    
+    @api.depends('installment_amount', 'loan_amount')
+    def _compute_loan_term(self):
+        for rec in self:
+            rec.term = 0
+            if rec.loan_amount and rec.installment_amount:
+                rec.term = math.ceil(rec.loan_amount / rec.installment_amount)
+                
 
     @api.depends('term', 'loan_amount')
     def get_installment_amount(self):
