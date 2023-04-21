@@ -7,8 +7,11 @@
             <field name="arch" type="xml">
                 <tree>
                     <field name="name"/>
+                    <field name="consignee_id"/>
                     <field name="type"/>
                     <field name="transport_type"/>
+                    <field name="expected_date"/>
+                    <field name="create_uid"/>
                 </tree>
             </field>
         </record>
@@ -73,11 +76,15 @@
                             <group>
                                 <field name="agent_id"/>
                                 <field name="awb_number" />
+                                <field name="bl_number" />
+                                <field name="cinv_number" />
                             </group>
                             <group>
                                 <field name="expected_date"/>
                                 <field name="custom_entry" />
-                                <field name="company_id" />
+                                <field name="entry_number" />
+                                <field name="idf_number" />
+                                <field name="company_id" invisible="1"/>
                                 <field name="company_currency_id" invisible="1" />
                             </group>
                         </group>
@@ -86,7 +93,9 @@
                                 <field name="order_ids">
                                     <tree string="Order Lines" editable="bottom">
                                         <field name="container_id"/>
+                                        <field name="total_containers"/>
                                         <field name="product_id"/>
+                                        <field name="packages"/>
                                         <field name="billing_type"/>
                                         <field name="pricing_id"/>
                                         <field name="volume" attrs="{'invisible': [('billing_type', '!=', 'volume')]}"/>
@@ -157,6 +166,9 @@
                                         <field name="type"/>
                                     </tree>
                                 </field>
+                            </page>
+                            <page string="Status Description">
+                                <field name="status"/>
                             </page>
                         </notebook>
                     </sheet>

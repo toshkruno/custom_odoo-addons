@@ -75,8 +75,13 @@ class FreightOrder(models.Model):
     company_currency_id = fields.Many2one(related='company_id.currency_id')
     expected_date = fields.Date('Expected Date')
     track_ids = fields.One2many('freight.track', 'track_id')
-    awb_number = fields.Char(string='AWB / BL Number')
+    awb_number = fields.Char(string='AWB Number')
+    bl_number = fields.Char(string='BL Number')
     custom_entry = fields.Char(string='Custom Entry')
+    cinv_number = fields.Char(string='CINV Number')
+    idf_number = fields.Char(string='IDF Number')
+    entry_number = fields.Char(string='Entry NUmber')
+    status = fields.Text('Status Description')
 
     @api.depends('order_ids.total_price', 'order_ids.volume', 'order_ids.weight')
     def _compute_total_order_price(self):
@@ -225,6 +230,7 @@ class FreightOrder(models.Model):
             'ref': self.name,
             'transport_type': self.transport_type,
             'awb_number': self.awb_number,
+            'bl_number': self.bl_number,
             'consignee_id': self.consignee_id.id,
             'ship_date': self.order_date,
             'ship_to_id': self.ship_to_id.id,
@@ -424,9 +430,11 @@ class FreightOrderLine(models.Model):
     _name = 'freight.order.line'
 
     order_id = fields.Many2one('freight.order')
-    container_id = fields.Many2one('freight.container', string='Container',
+    container_id = fields.Many2one('freight.container', string='Container Size',
                                    domain="[('state', '=', 'available')]")
-    product_id = fields.Many2one('product.product', string='Goods')
+    total_containers = fields.Integer(string='Quantity')    
+    packages = fields.Integer(string='Packages')    
+    product_id = fields.Many2one('product.product', string='Goods / Description')
     billing_type = fields.Selection([('weight', 'Weight'),
                                      ('volume', 'Volume')], string="Billing On")
     pricing_id = fields.Many2one('freight.price', string='Pricing')

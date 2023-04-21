@@ -15,6 +15,7 @@
 
             <xpath expr="//div[@name='journal_div']" position="after">
                 <field name="awb_number" attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund'))]}"/>
+                <field name="bl_number" attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund'))]}"/>
                 <field name="custom_entry" attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund'))]}"/>
                 <field name="transport_type" attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund'))]}"/>
             </xpath>

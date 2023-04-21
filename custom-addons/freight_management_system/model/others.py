@@ -7,7 +7,8 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
 
     custom_entry = fields.Char(string='Custom Entry')
-    awb_number = fields.Char(string='AWB / BL Number')
+    awb_number = fields.Char(string='AWB Number')
+    bl_number = fields.Char(string='BL Number')
     consignee_id = fields.Many2one(comodel_name='res.partner', string='Shipper Name')
     ship_to_id = fields.Many2one(comodel_name='res.partner', string='Ship To', domain=[('type', '=', 'delivery')])
     transport_type = fields.Selection(string='Cargo', selection=TRANSPORT_MODES)
