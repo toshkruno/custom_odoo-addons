@@ -34,7 +34,7 @@ class FreightOrder(models.Model):
     _description = 'Freight Order'
 
     name = fields.Char('Name', default='New', readonly=True)
-    shipper_id = fields.Many2one('res.partner', 'Partner', required=True, help="Customer's Details")
+    shipper_id = fields.Many2one('res.partner', 'Customer', required=True, help="Customer's Details")
     consignee_id = fields.Many2one('res.partner', 'Shipper Name', help="Details of consignee")
     ship_to_id = fields.Many2one('res.partner', string='Ship To', domain=[('type', '=', 'delivery')])
     type = fields.Selection([('import', 'Import'), ('export', 'Export')],
@@ -70,7 +70,7 @@ class FreightOrder(models.Model):
     total_route_sale = fields.Float('Total Sale', compute="_compute_total_route_cost")
     service_ids = fields.One2many('freight.order.service', 'line_id')
     total_service_sale = fields.Float('Service Total Sale', compute="_compute_total_service_cost")
-    agent_id = fields.Many2one('res.partner', 'Agent', required=True, help="Details of agent")
+    agent_id = fields.Many2one('res.partner', 'Agent', help="Details of agent", default=lambda s: s.env.company.partner_id.id) # redundant field
     company_id = fields.Many2one('res.company', string='Company', default=lambda s: s.env.company.id)
     company_currency_id = fields.Many2one(related='company_id.currency_id')
     expected_date = fields.Date('Expected Date')
@@ -431,7 +431,7 @@ class FreightOrderLine(models.Model):
     order_id = fields.Many2one('freight.order')
     container_id = fields.Many2one('freight.container', string='Container Size',
                                    domain="[('state', '=', 'available')]")
-    total_containers = fields.Integer(string='No. of Containers')    
+    total_containers = fields.Integer(string='Quantity / No. of Containers')    
     packages = fields.Integer(string='Packages')    
     product_id = fields.Many2one('product.product', string='Goods / Description')
     billing_type = fields.Selection([('weight', 'Weight'),

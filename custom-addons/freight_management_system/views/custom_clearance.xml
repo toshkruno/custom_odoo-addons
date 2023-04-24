@@ -37,7 +37,7 @@
                                     <field name="date"/>
                                 </group>
                                 <group>
-                                    <field name="agent_id"/>
+                                    <!-- <field name="agent_id"/> -->
                                     <field name="loading_port_id" />
                                     <field name="discharging_port_id" />
                                 </group>
