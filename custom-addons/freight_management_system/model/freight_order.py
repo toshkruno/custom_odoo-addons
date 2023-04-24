@@ -77,10 +77,9 @@ class FreightOrder(models.Model):
     track_ids = fields.One2many('freight.track', 'track_id')
     awb_number = fields.Char(string='AWB Number')
     bl_number = fields.Char(string='BL Number')
-    custom_entry = fields.Char(string='Custom Entry')
+    custom_entry = fields.Char(string='Custom Entry No')
     inv_number = fields.Char(string='INV Number')
     idf_number = fields.Char(string='IDF Number')
-    entry_number = fields.Char(string='Entry NUmber')
     status = fields.Text('Status Description')
 
     @api.depends('order_ids.total_price', 'order_ids.volume', 'order_ids.weight')
