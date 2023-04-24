@@ -77,7 +77,7 @@
                                 <field name="agent_id"/>
                                 <field name="awb_number" />
                                 <field name="bl_number" />
-                                <field name="cinv_number" />
+                                <field name="inv_number" />
                             </group>
                             <group>
                                 <field name="expected_date"/>

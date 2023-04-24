@@ -78,7 +78,7 @@ class FreightOrder(models.Model):
     awb_number = fields.Char(string='AWB Number')
     bl_number = fields.Char(string='BL Number')
     custom_entry = fields.Char(string='Custom Entry')
-    cinv_number = fields.Char(string='CINV Number')
+    inv_number = fields.Char(string='INV Number')
     idf_number = fields.Char(string='IDF Number')
     entry_number = fields.Char(string='Entry NUmber')
     status = fields.Text('Status Description')
