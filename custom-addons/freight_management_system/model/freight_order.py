@@ -431,7 +431,7 @@ class FreightOrderLine(models.Model):
     order_id = fields.Many2one('freight.order')
     container_id = fields.Many2one('freight.container', string='Container Size',
                                    domain="[('state', '=', 'available')]")
-    total_containers = fields.Integer(string='Quantity')    
+    total_containers = fields.Integer(string='No. of Containers')    
     packages = fields.Integer(string='Packages')    
     product_id = fields.Many2one('product.product', string='Goods / Description')
     billing_type = fields.Selection([('weight', 'Weight'),
