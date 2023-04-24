@@ -32,6 +32,7 @@ TRANSPORT_MODES = [('land', 'Land'), ('air', 'Air'), ('sea', 'Sea'), ('rail', 'R
 class FreightOrder(models.Model):
     _name = 'freight.order'
     _description = 'Freight Order'
+    _order = 'name desc'
 
     name = fields.Char('Name', default='New', readonly=True)
     shipper_id = fields.Many2one('res.partner', 'Customer', required=True, help="Customer's Details")
