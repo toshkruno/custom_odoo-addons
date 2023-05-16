@@ -16,7 +16,7 @@
     'version': '15.0.0.0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['account', 'hr_payroll', 'sale'],
+    'depends': ['account', 'hr_payroll', 'sale', 'freight_management_system'],
 
     # always loaded
     'data': [
