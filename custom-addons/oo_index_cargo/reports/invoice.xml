@@ -1,6 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <template id="oo_index_report_invoice_document" inherit_id="account.report_invoice_document">
+    <xpath expr="//div[@id='informations']" position="inside">
+
+            <div class="col-auto col-3 mw-100 mb-2" t-if="o.po_number" name="po_number">
+                <strong>PO Number:</strong>
+                <p class="m-0" t-field="o.po_number"/>
+            </div>
+
+        </xpath>
         <xpath expr="//div[@id='qrcode']" position="after">
             <div id="indexqr">
                 <p>

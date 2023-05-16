@@ -24,6 +24,16 @@
                 <p class="m-0" t-field="o.awb_number"/>
             </div>
 
+            <div class="col-auto col-3 mw-100 mb-2" t-if="o.bl_number" name="bl_number">
+                <strong>BL Number:</strong>
+                <p class="m-0" t-field="o.bl_number"/>
+            </div>
+
+            <div class="col-auto col-3 mw-100 mb-2" t-if="o.custom_entry" name="custom_entry">
+                <strong>Custom Entry:</strong>
+                <p class="m-0" t-field="o.custom_entry"/>
+            </div>
+
             <div class="col-auto col-3 mw-100 mb-2" t-if="o.ship_date" name="ship_date">
                 <strong>Shipping Date:</strong>
                 <p class="m-0" t-field="o.ship_date"/>

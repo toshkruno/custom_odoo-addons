@@ -36,6 +36,7 @@
         'data/freight_order_data.xml',
 
         'wizard/custom_revision.xml',
+        'wizard/freight_report.xml',
 
         'report/report_tracking.xml',
         'report/report_order.xml',

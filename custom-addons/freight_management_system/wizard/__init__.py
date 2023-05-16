@@ -21,3 +21,4 @@
 #
 ###################################################################################
 from . import custom_revision
+from . import freight_report
