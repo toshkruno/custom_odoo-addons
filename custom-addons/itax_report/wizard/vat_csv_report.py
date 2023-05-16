@@ -57,11 +57,8 @@ class VatReportWizard(models.TransientModel):
         file_fd, file_path = tempfile.mkstemp(
             suffix='.csv', prefix='sale_vat_report')
         csv_data = []
-        # if invoice_objs.filtered(lambda inv: inv.partner_id.vat):
         if invoice_objs:
-            # for inv in invoice_objs.filtered(lambda inv: inv.partner_id.vat):
             for inv in invoice_objs:
-                # esd = inv.esd_signature 
                 rInv = False
                 has_tax = False
                 if inv.move_type == 'out_refund' and inv.reversed_entry_id:
@@ -69,13 +66,6 @@ class VatReportWizard(models.TransientModel):
                         ('id', '=', inv.reversed_entry_id.id)])
                 amount = 0.0
                 for invoice_line in inv.line_ids:
-                    # price_unit = invoice_line.price_unit * (1 - (invoice_line.discount or 0.0) / 100.0)
-                    # taxes = self.tax_id.compute_all(
-                    #     price_unit,
-                    #     inv.currency_id,
-                    #     invoice_line.quantity,
-                    #     invoice_line.product_id,
-                    #     inv.partner_id)['taxes']
                     for rec in self.tax_id:
                         for tax in invoice_line.tax_ids:
                             if rec.id == tax.id:
@@ -87,8 +77,6 @@ class VatReportWizard(models.TransientModel):
                                     amount += (-1 * taxes['taxes'][0]['base'])
                                 else:
                                     amount += taxes['taxes'][0]['base']
-                                # for amount in taxes:
-                                #     tax_amount += amount['amount']
                                 
                 account = ''
                 for invoice_line in inv.invoice_line_ids:
@@ -102,7 +90,6 @@ class VatReportWizard(models.TransientModel):
                                 inv.company_id.company_registry or '',
                                 inv.date.strftime("%d/%m/%Y"),
                                 inv.name or '',
-                                ('/' + inv.esd_signature) or '',
                                 account,
                                 amount * inv.currency_id._get_conversion_rate(inv.currency_id, inv.company_id.currency_id, inv.company_id, inv.invoice_date),
                                 '',
@@ -119,7 +106,6 @@ class VatReportWizard(models.TransientModel):
                 #'ETR Number',
                 #'Invoice Date',
                 #'Invoice Number',
-                #'KRA CUI Number',
                 #'Description of Goods/Services',
                 #'Taxable Amount',
                 #'Amount of VAT',
@@ -143,7 +129,6 @@ class VatReportWizard(models.TransientModel):
             return {
                 'name': _('Odoo'),
                 'context': self.env.context,
-                # 'view_type': 'form',
                 'view_mode': 'form',
                 'res_model': 'wizard.excel.report',
                 'res_id': attachment_id.id,
@@ -170,9 +155,7 @@ class VatReportWizard(models.TransientModel):
         file_fd, file_path = tempfile.mkstemp(
             suffix='.csv', prefix='purchase_vat_report')
         csv_data = []
-        # if invoice_objs.filtered(lambda inv: inv.partner_id.vat):
         if invoice_objs:
-            # for inv in invoice_objs.filtered(lambda inv: inv.partner_id.vat):
             for inv in invoice_objs:
                 rInv = False
                 has_tax = False
@@ -245,7 +228,6 @@ class VatReportWizard(models.TransientModel):
             return {
                 'name': _('Odoo'),
                 'context': self.env.context,
-                # 'view_type': 'form',
                 'view_mode': 'form',
                 'res_model': 'wizard.excel.report',
                 'res_id': attachment_id.id,
