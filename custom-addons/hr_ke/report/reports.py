@@ -1169,7 +1169,10 @@ class PayrollReports(models.Model):
                         # AI Insurance Relief
                         None,  # AJ PAYE Tax after deduct personal relief & Insurance Relief
                         slip.line_ids.search([('salary_rule_id', '=', rec.env.ref('hr_ke.ke_rule101').id), (
-                            'slip_id', '=', slip.id)], limit=1).total or 0.0  # AK Self Assesed PAYE Tax
+                            'slip_id', '=', slip.id)], limit=1).total or 0.0, # AK Self Assesed PAYE Tax
+                        
+                         slip.line_ids.search([('salary_rule_id', '=', rec.env.ref('hr_ke.ke_rule92').id), (
+                            'slip_id', '=', slip.id)], limit=1).total or 0.0  # N.H.I.F Relief
                     ]
                     details_disabled.append(data_disabled)
             # Write employee details to csv

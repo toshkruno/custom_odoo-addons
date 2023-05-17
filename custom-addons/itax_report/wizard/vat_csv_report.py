@@ -218,7 +218,7 @@ class VatReportWizard(models.TransientModel):
             result_file = open(file_path, 'rb').read()
             attachment_id = self.env['wizard.excel.report'].create({
                 'name': 'Purchases - %s %s.csv' % (calendar.month_name[int(self.month_of)], self.year_of),
-                'report': base64.encodestring(result_file)
+                'report': base64.b64encode(result_file)
             })
             try:
                 os.unlink(file_path)
