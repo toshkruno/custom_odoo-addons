@@ -226,8 +226,7 @@ result = 0.00
         string='Salary Rule')
     employee_id = fields.Many2one(
         'hr.employee',
-        'Employee Name',
-        required=True)
+        'Employee Name')
     fixed = fields.Float('Fixed Value', digits=dp.get_precision('Account'))
     amount = fields.Float(
         'Computed value',
@@ -343,8 +342,7 @@ result = 0.00
         this deduction")
     employee_id = fields.Many2one(
         'hr.employee',
-        'Employee Name',
-        required=True)
+        'Employee Name')
     fixed = fields.Float(
         'Fixed Amount',
         digits=dp.get_precision('Account'),
