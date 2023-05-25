@@ -185,14 +185,9 @@
                         </tbody>
                     </table>
                 </div>
-                <p t-if="o.net_wage &gt;= 0">To pay on <b>
-                        <span t-field="o.employee_id.bank_account_id" />
-                    </b> of <i>
-                        <span t-field="o.employee_id" />
-                    </i>: <span
-                        t-field="o.net_wage" /></p>
-                <p t-if="o.net_wage &lt; 0">The net amount will be recovered from the first positive
-                    remuneration established after this.</p>
+              <t t-set="net_wage" t-value="o.line_ids.filtered(lambda l: l.appears_on_payslip and l.code == 'P120').total or 0.00"/>
+              <p t-if="net_wage &gt;= 0">To pay on <b><span t-field="o.employee_id.bank_account_id"/></b> of <i><span t-field="o.employee_id"/></i>: <span t-esc="'{:,}'.format(net_wage)"/></p>
+              <p t-if="net_wage &lt; 0">The net amount will be recovered from the first positive remuneration established after this.</p>
 
             </div>
         </xpath>
