@@ -282,18 +282,18 @@ class employee_loan(models.Model):
             else:
                 loan.installment_amount = 0.0
 
-    @api.constrains('employee_id')
-    def _check_loan(self):
-        now = datetime.now()
-        year = now.year
-        s_date = str(year) + '-01-01'
-        e_date = str(year) + '-12-01'
+    # @api.constrains('employee_id')
+    # def _check_loan(self):
+    #     now = datetime.now()
+    #     year = now.year
+    #     s_date = str(year) + '-01-01'
+    #     e_date = str(year) + '-12-01'
 
-        loan_ids = self.search(
-            [('employee_id', '=', self.employee_id.id), ('date', '<=', e_date), ('date', '>=', s_date)])
-        loan = len(loan_ids)
-        if loan > self.employee_id.loan_request:
-            raise ValidationError("You can create maximum %s loan" % self.employee_id.loan_request)
+    #     loan_ids = self.search(
+    #         [('employee_id', '=', self.employee_id.id), ('date', '<=', e_date), ('date', '>=', s_date)])
+    #     loan = len(loan_ids)
+    #     if loan > self.employee_id.loan_request:
+    #         raise ValidationError("You can create maximum %s loan" % self.employee_id.loan_request)
 
     @api.constrains('loan_amount', 'term', 'loan_type_id', 'employee_id.loan_request')
     def _check_loan_amount_term(self):
