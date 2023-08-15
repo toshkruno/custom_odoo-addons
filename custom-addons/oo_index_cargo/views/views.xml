@@ -16,8 +16,8 @@
 
     <!-- view_order_form inherit form view -->
     <record id="oo_index_view_order_form" model="ir.ui.view">
-        <field name="name">view_order_form.inherit.view.form</field>
-        <field name="model">view_order_form</field>
+        <field name="name">sale.order.inherit.view.form</field>
+        <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             
