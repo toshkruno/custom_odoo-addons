@@ -23,7 +23,7 @@
         'reports/invoice.xml',
         'reports/payslip.xml',
         'reports/sale_order.xml',
-        'views/invoice.xml',
+        'views/views.xml',
     ],
 
 }

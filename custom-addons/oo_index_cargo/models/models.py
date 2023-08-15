@@ -5,6 +5,12 @@ import uuid
 from odoo import api, models, fields
 
 
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+
+    order_note = fields.Text(string='Order Note', help="Extra order details")
+
+
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
