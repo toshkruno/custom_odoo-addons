@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="tender_root_menu"
+              name="Tender Manager"
+              web_icon="tender_tracker,static/description/icon.png"
+              sequence="50"/>
+
+    <menuitem id="configuration_menu"
+              name="Configuration"
+              parent="tender_root_menu"
+              sequence="1"/>
+
+</odoo>

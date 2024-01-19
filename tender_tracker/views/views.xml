@@ -1,0 +1,77 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <record id="view_tender_form" model="ir.ui.view">
+        <field name="name">tender.tracker.form</field>
+        <field name="model">tender.tracker</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                    <field name="validity_period"/>
+                    <field name="submission_deadline"/>
+                    <field name="opening_date"/>
+                    <field name="document_fee"/>
+                    <field name="bid_bond_required"/>
+                    <field name="eligibility_criteria" widget="text"/>
+                </group>
+            </form>
+        </field>
+    </record>
+<!--
+    <record model="ir.ui.view" id="tender_tracker.list">
+      <field name="name">tender_tracker list</field>
+      <field name="model">tender_tracker.tender_tracker</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+<!--
+    <record model="ir.actions.act_window" id="tender_tracker.action_window">
+      <field name="name">tender_tracker window</field>
+      <field name="res_model">tender_tracker.tender_tracker</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+-->
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="tender_tracker.action_server">
+      <field name="name">tender_tracker server</field>
+      <field name="model_id" ref="model_tender_tracker_tender_tracker"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+<!--
+    <menuitem name="tender_tracker" id="tender_tracker.menu_root"/>
+-->
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="tender_tracker.menu_1" parent="tender_tracker.menu_root"/>
+    <menuitem name="Menu 2" id="tender_tracker.menu_2" parent="tender_tracker.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="tender_tracker.menu_1_list" parent="tender_tracker.menu_1"
+              action="tender_tracker.action_window"/>
+    <menuitem name="Server to list" id="tender_tracker" parent="tender_tracker.menu_2"
+              action="tender_tracker.action_server"/>
+-->
+  </data>
+</odoo>

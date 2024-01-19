@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_tender_tree" model="ir.ui.view">
+        <field name="name">tender.tree</field>
+        <field name="model">tender.initial</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="validity_period" string="Validity window(days)"/>
+                <field name="submission_deadline" string="Submission deadline"/>
+                <field name="opening_date"/>
+                <field name="bid_bond_required"/>
+                <field name="document_fee"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_tender_preparation_tree" model="ir.ui.view">
+        <field name="name">tender.preparation.tree</field>
+        <field name="model">tender.preparation</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="preparation_notes"/>
+                <field name="technical_proposal"/>
+                <field name="financial_proposal"/>
+                <field name="preparation_completed"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_tender_form" model="ir.ui.view">
+        <field name="name">tender.form</field>
+        <field name="model">tender.initial</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="document" string="Document"/>
+                        </group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="validity_period"/>
+                            <field name="submission_deadline"/>
+                            <field name="opening_date"/>
+                        </group>
+                        <group>
+                            <field name="bid_bond_required"/>
+                            <field name="document_fee"/>
+                            <field name="eligibility_criteria"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tender_preparation_form" model="ir.ui.view">
+        <field name="name">tender.preparation.form</field>
+        <field name="model">tender.preparation</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="document" string="Document"/>
+                        </group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="validity_period"/>
+                            <field name="submission_deadline"/>
+                            <field name="opening_date"/>
+                        </group>
+                        <group>
+                            <field name="preparation_notes"/>
+                            <field name="technical_proposal"/>
+                            <field name="financial_proposal"/>
+                            <field name="preparation_completed"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+
+<!--    search views-->
+
+    <record id="act_tenders_graph" model="ir.actions.act_window">
+        <field name="name">Tenders</field>
+        <field name="res_model">tender.initial</field>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="tender_tracker.tender_graph">graph</field>
+    </record>
+
+    <record id="act_tenders_list" model="ir.actions.act_window">
+        <field name="name">Tenders</field>
+        <field name="res_model">tender.initial</field>
+        <field name="view_mode">tree,form</field>
+<!--        <field name="view_id" ref="tender_tracker.tender_graph">graph</field>-->
+    </record>
+
+    <record id="act_tenders_calendar" model="ir.actions.act_window">
+        <field name="name">Tenders</field>
+        <field name="res_model">tender.initial</field>
+        <field name="view_mode">calendar</field>
+        <field name="view_id" ref="tender_tracker.tender_calendar">graph</field>
+    </record>
+
+    <record id="dashboard_form_view" model="ir.ui.view">
+        <field name="name">Dashboard Form</field>
+        <field name="model">board.board</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Dashboard">
+                <board style="1-2">
+                    <column>
+                        <action
+                                string="Tenders and Review"
+                                name="%(tender_tracker.act_tenders_graph)d"
+                        />
+                        <action
+                                string="Tenders and Review List"
+                                name="%(act_tenders_list)d"
+                        />
+                    </column>
+
+                    <column>
+                        <action
+                                string="Tenders and Review Calendar"
+                                name="%(act_tenders_calendar)d"
+                        />
+                    </column>
+                </board>
+            </form>
+        </field>
+    </record>
+
+    <record id="tenders_dashboard" model="ir.actions.act_window">
+        <field name="name">Dashboard</field>
+        <field name="res_model">board.board</field>
+        <field name="view_mode">form</field>
+        <field name="usage">menu</field>
+        <field name="view_id" ref="dashboard_form_view"/>
+    </record>
+
+<!--    menu items-->
+
+    <menuitem id="dashboard_menu"
+              name="Dashboard"
+              parent="tender_root_menu"
+              action="action_tender"
+              sequence="0"/>
+</odoo>
