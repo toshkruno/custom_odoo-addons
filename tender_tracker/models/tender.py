@@ -303,7 +303,3 @@ class TenderUsers(models.Model):
 
     user_name = fields.Char('Name', required=True, tracking=True)
     email = fields.Char(string='Email', required=True, tracking=True)
-
-    _sql_constraints = [
-        ('name_uniq', 'unique (name)', "Tag name already exists!"),
-    ]
