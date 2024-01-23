@@ -300,6 +300,7 @@ class TenderUsers(models.Model):
     """ Tags of tender's users """
     _name = "tender.users"
     _description = "Tender Users"
+    _inherit = ['mail.thread', 'mail.activity.mixin', 'rating.mixin']
 
-    user_name = fields.Char('Name', required=True, tracking=True)
+    user_name = fields.Text(string='Name', required=True, tracking=True)
     email = fields.Char(string='Email', required=True, tracking=True)

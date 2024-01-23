@@ -27,6 +27,17 @@
         </field>
     </record>
 
+    <record id="view_tender_user_tree" model="ir.ui.view">
+        <field name="name">tender.users.tree</field>
+        <field name="model">tender.users</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="user_name"/>
+                <field name="email"/>
+            </tree>
+        </field>
+    </record>
+
 
     <record id="view_tender_form" model="ir.ui.view">
         <field name="name">tender.form</field>
@@ -58,6 +69,10 @@
                         <field name="tag_ids" widget="many2one_tags"/>
                         <field name="kanban_state" widget="state_selection" optional="hide"/>
                     </group>
+                    <group>
+                        <field name="user_name"/>
+                        <field name="email"/>
+                    </group>
                 </sheet>
                 <!-- Chatter -->
                 <div class="oe_chatter">
@@ -88,6 +103,31 @@
                         <field name="legend_normal"/>
                         <field name="legend_done"/>
                         <field name="legend_events"/>
+                    </group>
+                </sheet>
+                <!-- Chatter -->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <!--   tender user form view-->
+
+
+    <record id="view_tender_users_form" model="ir.ui.view">
+        <field name="name">tender.users.form</field>
+        <field name="model">tender.users</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="user_name"/>
+                        <field name="email"/>
                     </group>
                 </sheet>
                 <!-- Chatter -->
@@ -219,6 +259,19 @@
         </field>
     </record>
 
+    <record id="action_tender_users" model="ir.actions.act_window">
+        <field name="name">Tender Users</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">tender.users</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new tender users!
+            </p>
+        </field>
+    </record>
+
     <record id="action_tender_stages" model="ir.actions.act_window">
         <field name="name">Tender Stages</field>
         <field name="type">ir.actions.act_window</field>
@@ -245,4 +298,10 @@
               parent="configuration_menu"
               action="action_tender_stages"
               sequence="2"/>
+
+    <menuitem id="menu_action_tender_users"
+              name="Configure tender users"
+              parent="configuration_menu"
+              action="action_tender_users"
+              sequence="3"/>
 </odoo>
