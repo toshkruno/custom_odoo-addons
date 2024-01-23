@@ -15,8 +15,7 @@
     'depends': ['base', 'web', 'sale', 'board', 'mail'],
     'data': [
         'security/ir.model.access.csv',
-        # 'views/views.xml',
-        # 'views/templates.xml',
+        # 'security/ir.model.access.csv',
         'views/menu.xml',
         'views/tender_views.xml',
         # 'views/dashboard.xml',

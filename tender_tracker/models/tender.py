@@ -73,6 +73,8 @@ class TenderTracker(models.Model):
     bid_bond_required = fields.Boolean(string='Bid Bond Required')
     eligibility_criteria = fields.Text(string='Eligibility Criteria')
     document = fields.Binary(string='Document', tracking=True)
+    user_name = fields.Many2one('tender.users')
+    email = fields.Char(related='user_name.email')
 
     extracted_text = fields.Text(string='Extracted Text')
     progress = fields.Integer()
@@ -288,6 +290,19 @@ class TenderTags(models.Model):
 
     name = fields.Char('Name', required=True)
     color = fields.Integer(string='Color', default=_get_default_color)
+
+    _sql_constraints = [
+        ('name_uniq', 'unique (name)', "Tag name already exists!"),
+    ]
+
+
+class TenderUsers(models.Model):
+    """ Tags of tender's users """
+    _name = "tender.users"
+    _description = "Tender Users"
+
+    user_name = fields.Char('Name', required=True, tracking=True)
+    email = fields.Char(string='Email', required=True, tracking=True)
 
     _sql_constraints = [
         ('name_uniq', 'unique (name)', "Tag name already exists!"),

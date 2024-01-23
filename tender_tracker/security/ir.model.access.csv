@@ -2,3 +2,4 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access.tender.initial,access_tender_initial,tender_tracker.model_tender_initial,base.group_user,1,1,1,1
 access.tender.stage,access_tender_stage,tender_tracker.model_tender_stage,base.group_user,1,1,1,1
 access.tender.tags,access_tender_tags,tender_tracker.model_tender_tags,base.group_user,1,1,1,1
+access.tender.users,access_tender_users,tender_tracker.model_tender_users,base.group_user,1,1,1,1
