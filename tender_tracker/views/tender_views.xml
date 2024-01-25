@@ -303,7 +303,7 @@
               sequence="2"/>
 
     <menuitem id="menu_action_tender_users"
-              name="Configure Tender Users"
+              name="Configure Tender Users 2"
               parent="configuration_menu"
               action="action_tender_users"
               sequence="3"/>
