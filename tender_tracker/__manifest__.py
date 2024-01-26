@@ -14,6 +14,7 @@
 
     'depends': ['base', 'web', 'sale', 'board', 'mail'],
     'data': [
+        'data/mail_templates.xml',
         'security/ir.model.access.csv',
         # 'security/ir.model.access.csv',
         'views/menu.xml',

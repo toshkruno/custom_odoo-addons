@@ -259,6 +259,13 @@ class TenderTracker(models.Model):
             record.value2 = float(record.value) / 100
 
 
+    def action_send_mail(self):
+        template = self.env.ref('tender_tracker.mail_template_tender')
+        for rec in self:
+            email_values = {'scheduled_date': False}
+            template.send_mail(rec.id, force_send=True, email_values=email_values)
+
+
 # class TenderPreparation(models.Model):
 #     _name = 'tender.preparation'
 #     _description = 'Tender Preparation'
@@ -302,5 +309,5 @@ class TenderUsers(models.Model):
     _description = "Tender Users"
     _inherit = ['mail.thread', 'mail.activity.mixin', 'rating.mixin']
 
-    user_name = fields.Text(string='Name', required=True, tracking=True)
+    name = fields.Text(string='Name', required=True, tracking=True)
     email = fields.Char(string='Email', required=True, tracking=True)
