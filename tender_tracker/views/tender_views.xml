@@ -304,13 +304,13 @@
               sequence="0"/>
 
     <menuitem id="menu_action_tender_stage"
-              name="Configure tender stages"
+              name="Configure Tender Stages"
               parent="configuration_menu"
               action="action_tender_stages"
               sequence="2"/>
 
     <menuitem id="menu_action_tender_users"
-              name="Configure tender users"
+              name="Configure Tender Users 2"
               parent="configuration_menu"
               action="action_tender_users"
               sequence="3"/>
