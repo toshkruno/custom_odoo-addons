@@ -76,6 +76,13 @@
                         <field name="user_name"/>
                         <field name="email"/>
                     </group>
+
+                    <notebook>
+                        <page></page>
+                        <page></page>
+                    </notebook>
+
+
                 </sheet>
                 <!-- Chatter -->
                 <div class="oe_chatter">
