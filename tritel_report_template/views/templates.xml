@@ -162,6 +162,13 @@
             </span>
         </t>
     </template>
+    <template id="template_bank_info">
+        <t>
+            <span t-attf-style="color: #{text_color or '#000000'};padding-bottom: 5px;">
+                <t t-esc="o.journal_id.bank_acc_number"/>
+            </span>
+        </t>
+    </template>
     <template id="report_invoice_order_lines">
         <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
         <table BORDERCOLOR="#{theme_color or '#000000'}" border="1" cellpadding="0" cellspacing="0"
@@ -452,14 +459,80 @@
                  t-if="o.company_id.signature"/>
         </t>
     </template>
+    <template id="invoice_subtotal_tem">
+        <div class="clearfix">
+            <table class="pull-right" t-att-style="'font-weight:bold; text-transform:capitalize; color: '+ text_color">
+                <t t-set="tax_totals" t-value="json.loads(o.tax_totals_json)"/>
+                <t t-foreach="tax_totals['subtotals']" t-as="subtotal">
+                    <tr class="border-black o_subtotal">
+                        <td class="text-left" colspan="2" t-att-style="'padding:9px 10px 7px 0px;'">
+                            <strong t-esc="subtotal['name']"/>
+                        </td>
+                        <td align="text-right" style="padding:9px 0px 7px 10px;">
+                            <span t-att-class="oe_subtotal_footer_separator"
+                            t-esc="subtotal['amount']" />
+                        </td>
+                    </tr>
+                    <t t-set="subtotal_to_show" t-value="subtotal['name']"/>
+                </t>
+                <tr>
+                    <td colspan="3" style="border-bottom:1px solid #959595"/>
+                </tr>
+
+                <t t-foreach="tax_totals['groups_by_subtotal'][subtotal_to_show]" t-as="amount_by_group">
+                    <tr>
+                        <t t-if="len(tax_totals['groups_by_subtotal'][subtotal_to_show]) > 1">
+                            <td class="left" colspan="2" style="padding:9px 10px 7px 0px;  text-transform:uppercase;" >
+                                <span t-esc="amount_by_group['tax_group_name']"/>
+                                <span class="text-nowrap"> on
+                                    <t t-esc="amount_by_group['formatted_tax_group_base_amount']"/>
+                                </span>
+                            </td>
+                            <td class="o_price_total"  align="right" style="padding:9px 0px 7px 10px;text-transform:uppercase; ">
+                                <span class="text-nowrap" t-esc="amount_by_group['formatted_tax_group_amount']"/>
+                            </td>
+                        </t>
+                        <t t-else="">
+                            <td class="left" colspan="2" style="padding:9px 10px 7px 0px;  text-transform:uppercase;" >
+                                <span t-esc="amount_by_group['tax_group_name']"/>
+                           </td>
+                            <td class="o_price_total"  align="right" style="padding:9px 0px 7px 10px;text-transform:uppercase; ">
+                                <span class="text-nowrap" t-esc="amount_by_group['formatted_tax_group_amount']" />
+                            </td>
+                        </t>
+                    </tr>
+                </t>
+
+                <tr>
+                    <td colspan="3" style="border-bottom:1px solid #959595"/>
+                </tr>
+                <tr id="total">
+                    <td class="left" colspan="2" t-att-style="'padding:9px 10px 7px 0px;  text-transform:uppercase; '">Total</td>
+                    <td align="right" style="padding:9px 0px 7px 10px;text-transform:uppercase; ">
+                        <span t-esc="tax_totals['amount_total']"/>
+                    </td>
+                </tr>
+                <t t-set="payments_vals" t-value="o._get_reconciled_info_JSON_values()"/>
+                <tr t-if="len(payments_vals) > 0">
+                    <td colspan="3" style="border-bottom:1px solid #959595"/>
+                </tr>
+                <tr id="total_due" t-if="len(payments_vals) > 0">
+                    <td class="left" colspan="2" t-att-style="'padding:9px 10px 7px 0px;  text-transform:uppercase; '">Amount Due</td>
+                    <td align="right" style="padding:9px 0px 7px 10px;text-transform:uppercase; ">
+                        <span t-field="o.amount_residual"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </template>
     <template id="report_invoice_barcode">
         <div class="row" t-if="o.company_id.is_show_barcode == True">
             <div style="page-break-inside: avoid !important; width:100%; text-align:right;">
 <!--                <strong class="text-center">Scan me!</strong>-->
 <!--                <br/>-->
 <!--                <br/>-->
-                <img style="width:190px; height:35px;"
-                     t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', o.name, 600, 100)"/>
+                <img style="width:140px; height:75px;"
+                     t-att-src="'/report/barcode/?type=%s&amp;value=%s' % ('QR', o.company_id)"/>
             </div>
         </div>
         <div class="row" t-if="o.display_qr_code">

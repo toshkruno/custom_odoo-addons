@@ -269,6 +269,8 @@ class ResCompany(models.Model):
 
     add_product_image = fields.Boolean(
         string="Display Product Image", default=False, help="Please check it if you want to show Product Image in pdf.")
+    company_id = fields.Many2one('res.company', string="Company", store="True", readonl="True")
+
 
     def action_view_report_extra_content(self):
         action = self.env.ref(

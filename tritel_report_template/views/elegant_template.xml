@@ -134,9 +134,9 @@
                         <div style="padding:20px 0px 0 0; font-weight:bold; width:100%;" >
                             <t t-call="tritel_report_template.report_invoice_order_lines"/>
                         </div>
-                        <div>
-                            <t t-call="tritel_report_template.invoice_subtotal_tem" />
-                        </div>
+<!--                        <div>-->
+<!--                            <t t-call="tritel_report_template.invoice_subtotal_tem" />-->
+<!--                        </div>-->
                         <div t-attf-style="border-bottom:1px solid #{'#959595'}; padding:0px">
                             <t t-call="tritel_report_template.template_total_amount_word"/>
                         </div>

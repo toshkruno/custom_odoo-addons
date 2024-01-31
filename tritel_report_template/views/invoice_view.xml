@@ -9,8 +9,8 @@
                 <field domain="[('report_name', 'ilike', '%invoice_template%')]" name="report_template_id" options="{'no_create': True}" />
                 <field invisible="1" name="report_template_id1" widget="selection" />
                 <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed" rel="stylesheet"/>
-                <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet"/> /*Here your chosen Google Font or any other*/
-                <link rel="stylesheet" href="tritel_report_template/static/src/css/report_styles.css"/> /*This is your custom css file*/
+                <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet"/>
+                <link rel="stylesheet" href="tritel_report_template/static/src/css/report_styles.css"/>
             </xpath>
         </field>
     </record>
