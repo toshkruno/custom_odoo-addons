@@ -2,13 +2,13 @@
 # Part of Appjetty. See LICENSE file for full copyright and licensing details.
 
 {
-    'name': 'Clever Multiple Invoice Templates, by Tritel Technologies.',
+    'name': 'Clever Multiple Invoice Template, by Tritel Technologies',
     'version': '15.0.1.0.0',
-    'author': 'Tritel Technologies.',
+    'author': 'Tritel',
     'license': 'OPL-1',
     'category': 'Accounting',
     'depends': ['account', 'sale_management', 'purchase'],
-    'website': 'https://github.com/Tritel-Technologies',
+    'website': 'https://www.tritel.com',
     'description': '''Professiona Templates ,  
     Professional Report Templates , Customizable Invoice Templates , 
     Multiple Professional Invoice Templates  , Customized Invoice''',

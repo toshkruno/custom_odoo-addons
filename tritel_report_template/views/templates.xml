@@ -436,25 +436,24 @@
         </t>
     </template>
     <template id="report_invoice_barcode">
-        <div style="text-align: center;" valign="bottom">
-            <strong class="text-center">Scan me with your banking app.</strong>
+        <div style="text-align: center; width: fit-content !important;">
             <br/>
             <br/>
-            <img style="width:150px; height:70px;"
-                 t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('QR', o.name, 600, 100)"/>
+            <img style="width:120px; height:120px;"
+                 t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('QR', o.name, 120, 120)"/>
         </div>
     </template>
     <template id="report_invoice_notes">
         <ul t-attf-style="padding-left:15px; margin:0; color: #{text_color or '#000000'};">
-<!--            <li t-if="o.invoice_payment_term_id.name">-->
-<!--                <b>Payment Terms:</b>-->
-<!--                <span t-field="o.invoice_payment_term_id.name"/>-->
-<!--            </li>-->
-<!--            <li t-if="o.invoice_payment_term_id.note and o.company_id.is_show_payment_description == True">-->
-<!--                <b>Payment Terms Description:</b>-->
-<!--                <span t-field="o.invoice_payment_term_id.note"/>-->
-<!--            </li>-->
-<!--            <t t-esc='o.narration'/>-->
+            <!--            <li t-if="o.invoice_payment_term_id.name">-->
+            <!--                <b>Payment Terms:</b>-->
+            <!--                <span t-field="o.invoice_payment_term_id.name"/>-->
+            <!--            </li>-->
+            <!--            <li t-if="o.invoice_payment_term_id.note and o.company_id.is_show_payment_description == True">-->
+            <!--                <b>Payment Terms Description:</b>-->
+            <!--                <span t-field="o.invoice_payment_term_id.note"/>-->
+            <!--            </li>-->
+            <!--            <t t-esc='o.narration'/>-->
 
             <li t-if="o.fiscal_position_id.name">
                 <b>Fiscal Position Remark:</b>
@@ -464,6 +463,10 @@
                 <b>Comment:</b>
                 <span t-field="o.narration"/>
             </li>
+        </ul>
+    </template>
+    <template id="template_invoice_more_details">
+        <ul t-attf-style="padding-left:15px; margin:0; color: #{text_color or '#000000'};">
             <li t-if="o.awb_number">
                 <b>AWB Number:</b>
                 <span t-field="o.awb_number"/>
@@ -487,29 +490,29 @@
              t-att-style="'font-family:'+o.company_id.font_id.family+';font-size:'+str(o.company_id.font_size)+'px;'"
              t-if="o.company_id.report_footer_selection == 'standard'">
             <div class="text-center" style="border-top: 1px solid black;">
-<!--                <ul class="list-inline mb4">-->
-<!--                    <li t-if="company.phone">Phone:-->
-<!--                        <span t-field="company.phone"/>-->
-<!--                    </li>-->
-<!--                    <li t-if="company.email">Email:-->
-<!--                        <span t-field="company.email"/>-->
-<!--                    </li>-->
-<!--                    <li t-if="company.website">Web:-->
-<!--                        <span t-field="company.website"/>-->
-<!--                    </li>-->
-<!--                    <li t-if="company.vat">-->
-<!--                        <t t-esc="company.country_id.vat_label or 'TIN'"/>:-->
-<!--                        <span t-field="company.vat"/>-->
-<!--                    </li>-->
-<!--                </ul>-->
+                <!--                <ul class="list-inline mb4">-->
+                <!--                    <li t-if="company.phone">Phone:-->
+                <!--                        <span t-field="company.phone"/>-->
+                <!--                    </li>-->
+                <!--                    <li t-if="company.email">Email:-->
+                <!--                        <span t-field="company.email"/>-->
+                <!--                    </li>-->
+                <!--                    <li t-if="company.website">Web:-->
+                <!--                        <span t-field="company.website"/>-->
+                <!--                    </li>-->
+                <!--                    <li t-if="company.vat">-->
+                <!--                        <t t-esc="company.country_id.vat_label or 'TIN'"/>:-->
+                <!--                        <span t-field="company.vat"/>-->
+                <!--                    </li>-->
+                <!--                </ul>-->
                 <div style="padding-top: 5px !important;" name="financial_infos">
                     <span t-field="company.report_footer"/>
                 </div>
-<!--                <div class="text-muted">Page:-->
-<!--                    <span class="page"/>-->
-<!--                    /-->
-<!--                    <span class="topage"/>-->
-<!--                </div>-->
+                <!--                <div class="text-muted">Page:-->
+                <!--                    <span class="page"/>-->
+                <!--                    /-->
+                <!--                    <span class="topage"/>-->
+                <!--                </div>-->
             </div>
         </div>
         <div class="footer"

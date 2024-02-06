@@ -5,7 +5,7 @@ import odoo
 import sys
 import datetime
 from itertools import groupby
-# from imp import reload
+from imp import reload
 from odoo import fields, models, api, tools, _
 from odoo.tools.misc import formatLang
 from odoo.tools import float_is_zero
@@ -122,13 +122,12 @@ class AccountMove(models.Model):
         self.report_template_id = self.report_template_id or False
         self.report_template_id1 = report_id and report_id.id or False
 
-    # @api.multi
     # def invoice_print(self):
     #     """ Print the invoice and mark it as sent, so that we can see more
     #         easily the next step of the workflow
     #     """
     #     self.ensure_one()
-    #     self.sent = True
+    #     # self.sent = True
     #     res = super(AccountMove, self).invoice_print()
     #     if self.report_template_id or self.partner_id and self.partner_id.report_template_id or self.company_id and self.company_id.report_template_id:
     #         report_id = self.report_template_id or self.partner_id and self.partner_id.report_template_id or self.company_id and self.company_id.report_template_id
